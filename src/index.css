@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-gold: #B88A2E;
+  --dark-gold: #8C671D;
+  --light-gold: #F5EBD3;
+  --soft-gold: #FCF8EF;
+  --surface-main: #FFFFFF;
+  --surface-sec: #F8F8F6;
+  --text-main: #262626;
+  --text-muted: #737373;
+  --border-color: #E8E2D5;
+}
+
+body {
+  margin: 0;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text-main);
+  background-color: var(--surface-main);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F8F8F6;
+}
+::-webkit-scrollbar-thumb {
+  background: #DEC07A;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #B88A2E;
+}
+
+/* Ant Design Gold Theme Overrides */
+.ant-btn-primary {
+  background-color: #B88A2E !important;
+  border-color: #B88A2E !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 4px rgba(184, 138, 46, 0.2) !important;
+}
+.ant-btn-primary:hover {
+  background-color: #8C671D !important;
+  border-color: #8C671D !important;
+}
+
+/* Mobile responsive modal and drawer adjustments */
+@media (max-width: 640px) {
+  .ant-modal {
+    margin: 12px auto !important;
+    max-width: calc(100vw - 20px) !important;
+  }
+  .ant-modal .ant-modal-content {
+    padding: 16px !important;
+  }
+  .ant-modal .ant-modal-header {
+    margin-bottom: 12px !important;
+  }
+  .ant-drawer .ant-drawer-body {
+    padding: 16px !important;
+  }
+}
+
+.ant-table-wrapper .ant-table-thead > tr > th {
+  background: #FCF8EF !important;
+  color: #8C671D !important;
+  font-weight: 700 !important;
+  border-bottom: 1px solid #E8E2D5 !important;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+
+.ant-table-wrapper .ant-table-tbody > tr:hover > td {
+  background: #FCF8EF !important;
+}
+
+.ant-menu-light .ant-menu-item-selected {
+  background-color: #FCF8EF !important;
+  color: #8C671D !important;
+  font-weight: 600 !important;
+  border-right: 3px solid #B88A2E !important;
+}
+
+.ant-tabs-ink-bar {
+  background: #B88A2E !important;
+}
+
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #8C671D !important;
+  font-weight: 700 !important;
+}
+
+/* Smooth micro-interactions */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
