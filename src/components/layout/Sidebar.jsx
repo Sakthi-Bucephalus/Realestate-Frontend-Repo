@@ -13,6 +13,7 @@ import {
   BarChart3,
   Bell,
   Sliders,
+  Share2,
   ChevronLeft,
   ChevronRight,
   LogOut,
@@ -34,9 +35,16 @@ export const Sidebar = ({ mobileOpen, setMobileOpen, collapsed, setCollapsed }) 
     },
     {
       key: 'leads',
-      label: 'Leads & CRM',
+      label: 'Track Your Leads',
       path: '/leads',
       icon: Users2,
+      module: 'leads',
+    },
+    {
+      key: 'connect_meta',
+      label: 'Connect Meta',
+      path: '/connect-meta',
+      icon: Share2,
       module: 'leads',
     },
     {

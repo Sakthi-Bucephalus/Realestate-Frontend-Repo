@@ -4,27 +4,56 @@ import { Tag } from 'antd';
 export const StatusTag = ({ status, type = 'default' }) => {
   if (!status) return null;
 
-  let color = 'default';
-  let customClass = 'border font-medium text-xs rounded px-2 py-0.5';
-
   switch (status.toLowerCase()) {
-    // Available / Active / Completed / Confirmed
-    case 'available':
-    case 'active':
-    case 'completed':
-    case 'confirmed':
-    case 'ready to book':
+    // New Lead
+    case 'new':
       return (
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
-          <span className="w-1.5 h-1.5 mr-1.5 rounded-full bg-emerald-500"></span>
-          {status}
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 shadow-sm">
+          <span className="w-1.5 h-1.5 mr-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          New
         </span>
       );
 
-    // Reserved / Interested / Scheduled / Pending
-    case 'reserved':
+    // Hot Lead
+    case 'hot':
+      return (
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-orange-50 text-orange-700 border border-orange-300">
+          <span className="w-1.5 h-1.5 mr-1.5 rounded-full bg-orange-500"></span>
+          Hot
+        </span>
+      );
+
+    // Warm Lead
+    case 'warm':
+      return (
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-300">
+          <span className="w-1.5 h-1.5 mr-1.5 rounded-full bg-amber-500"></span>
+          Warm
+        </span>
+      );
+
+    // Cold Lead
+    case 'cold':
+      return (
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-300">
+          <span className="w-1.5 h-1.5 mr-1.5 rounded-full bg-slate-400"></span>
+          Cold
+        </span>
+      );
+
+    // In Progress
+    case 'in progress':
+      return (
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-800 border border-indigo-200">
+          <span className="w-1.5 h-1.5 mr-1.5 rounded-full bg-indigo-500"></span>
+          In Progress
+        </span>
+      );
+
+    // Interested / Reserved / Negotiation
     case 'interested':
-    case 'scheduled':
+    case 'reserved':
+    case 'contacted':
     case 'pending approval':
     case 'pending':
     case 'negotiation':
@@ -36,12 +65,26 @@ export const StatusTag = ({ status, type = 'default' }) => {
         </span>
       );
 
-    // Sold / Converted
+    // Not Interested
+    case 'not interested':
+      return (
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 border border-gray-300">
+          <span className="w-1.5 h-1.5 mr-1.5 rounded-full bg-gray-400"></span>
+          Not Interested
+        </span>
+      );
+
+    // Sold / Converted / Confirmed / Active
     case 'sold':
     case 'converted':
+    case 'available':
+    case 'active':
+    case 'completed':
+    case 'confirmed':
+    case 'ready to book':
       return (
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-800 border border-blue-200">
-          <span className="w-1.5 h-1.5 mr-1.5 rounded-full bg-blue-500"></span>
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+          <span className="w-1.5 h-1.5 mr-1.5 rounded-full bg-emerald-500"></span>
           {status}
         </span>
       );

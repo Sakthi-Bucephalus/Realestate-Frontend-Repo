@@ -1,15 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Form, Input, Select, DatePicker, Button, Timeline, Tag, message, Divider } from 'antd';
-import { User, Phone, Mail, MapPin, Calendar, Clock, CheckCircle, ArrowRight, AlertCircle } from 'lucide-react';
+import {
+  User,
+  Phone,
+  Mail,
+  MapPin,
+  Calendar,
+  Clock,
+  CheckCircle,
+  ArrowRight,
+  AlertCircle,
+  Share2,
+  FileQuestion,
+  PhoneCall,
+  Megaphone,
+} from 'lucide-react';
 import dayjs from 'dayjs';
 import { StatusTag } from '../../components/common/StatusTag';
 import api from '../../services/api';
 
 export const LeadDetailModal = ({ lead, visible, onClose, onRefresh }) => {
-  const [activeTab, setActiveTab] = useState('details'); // 'details' | 'followup' | 'convert'
+  const [activeTab, setActiveTab] = useState('details'); // 'details' | 'meta' | 'calls' | 'followup'
   const [followUpForm] = Form.useForm();
   const [completeForm] = Form.useForm();
   const [loading, setLoading] = useState(false);
+
+  // Automatically mark lead as reviewed on modal open to clear NEW LEAD badge
+  useEffect(() => {
+    if (visible && lead && lead._id && lead.isNewLead) {
+      api.patch(`/leads/${lead._id}/review`)
+        .then(() => {
+          if (onRefresh) onRefresh();
+        })
+        .catch(() => {});
+    }
+  }, [visible, lead?._id]);
 
   if (!lead) return null;
 
@@ -23,7 +48,7 @@ export const LeadDetailModal = ({ lead, visible, onClose, onRefresh }) => {
       });
       message.success('Follow-up scheduled successfully');
       followUpForm.resetFields();
-      onRefresh();
+      if (onRefresh) onRefresh();
     } catch (err) {
       message.error(err.response?.data?.message || 'Failed to schedule follow-up');
     } finally {
@@ -44,7 +69,7 @@ export const LeadDetailModal = ({ lead, visible, onClose, onRefresh }) => {
       });
       message.success('Follow-up completed and outcome logged');
       completeForm.resetFields();
-      onRefresh();
+      if (onRefresh) onRefresh();
     } catch (err) {
       message.error(err.response?.data?.message || 'Failed to log outcome');
     } finally {
@@ -58,7 +83,7 @@ export const LeadDetailModal = ({ lead, visible, onClose, onRefresh }) => {
     try {
       const res = await api.post(`/leads/${lead._id}/convert`);
       message.success(res.data.message || 'Lead converted to customer successfully!');
-      onRefresh();
+      if (onRefresh) onRefresh();
       onClose();
     } catch (err) {
       message.error(err.response?.data?.message || 'Conversion failed');
@@ -66,6 +91,8 @@ export const LeadDetailModal = ({ lead, visible, onClose, onRefresh }) => {
       setLoading(false);
     }
   };
+
+  const isMetaLead = lead.source === 'Meta Lead Ads' || !!lead.metaLeadId;
 
   return (
     <Modal
@@ -76,6 +103,16 @@ export const LeadDetailModal = ({ lead, visible, onClose, onRefresh }) => {
             <span className="text-xs font-semibold px-2 py-0.5 rounded bg-[#FCF8EF] text-[#8C671D] border border-[#DEC07A]">
               {lead.leadCode}
             </span>
+            {isMetaLead && (
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 flex items-center gap-1">
+                <Share2 size={10} /> Meta Ads
+              </span>
+            )}
+            {lead.isNewLead && (
+              <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 animate-pulse">
+                NEW LEAD
+              </span>
+            )}
           </div>
           <StatusTag status={lead.status} />
         </div>
@@ -83,7 +120,7 @@ export const LeadDetailModal = ({ lead, visible, onClose, onRefresh }) => {
       open={visible}
       onCancel={onClose}
       width="95%"
-      style={{ maxWidth: 700 }}
+      style={{ maxWidth: 750 }}
       footer={null}
       destroyOnClose
     >
@@ -91,17 +128,42 @@ export const LeadDetailModal = ({ lead, visible, onClose, onRefresh }) => {
       <div className="flex border-b border-[#E8E2D5] mb-5 mt-2 overflow-x-auto">
         <button
           onClick={() => setActiveTab('details')}
-          className={`py-2 px-4 text-xs font-bold border-b-2 transition-colors ${
+          className={`py-2 px-3 text-xs font-bold border-b-2 whitespace-nowrap transition-colors ${
             activeTab === 'details'
               ? 'border-[#B88A2E] text-[#8C671D]'
               : 'border-transparent text-[#737373] hover:text-[#262626]'
           }`}
         >
-          Lead Overview & Timeline
+          Overview & Timeline
         </button>
+
+        {isMetaLead && (
+          <button
+            onClick={() => setActiveTab('meta')}
+            className={`py-2 px-3 text-xs font-bold border-b-2 whitespace-nowrap transition-colors flex items-center gap-1 ${
+              activeTab === 'meta'
+                ? 'border-[#B88A2E] text-[#8C671D]'
+                : 'border-transparent text-[#737373] hover:text-[#262626]'
+            }`}
+          >
+            <Megaphone size={12} /> Meta Ads & Answers ({(lead.formAnswers || []).length})
+          </button>
+        )}
+
+        <button
+          onClick={() => setActiveTab('calls')}
+          className={`py-2 px-3 text-xs font-bold border-b-2 whitespace-nowrap transition-colors flex items-center gap-1 ${
+            activeTab === 'calls'
+              ? 'border-[#B88A2E] text-[#8C671D]'
+              : 'border-transparent text-[#737373] hover:text-[#262626]'
+          }`}
+        >
+          <PhoneCall size={12} /> Call Logs ({(lead.callLogs || []).length})
+        </button>
+
         <button
           onClick={() => setActiveTab('followup')}
-          className={`py-2 px-4 text-xs font-bold border-b-2 transition-colors ${
+          className={`py-2 px-3 text-xs font-bold border-b-2 whitespace-nowrap transition-colors ${
             activeTab === 'followup'
               ? 'border-[#B88A2E] text-[#8C671D]'
               : 'border-transparent text-[#737373] hover:text-[#262626]'
@@ -196,6 +258,120 @@ export const LeadDetailModal = ({ lead, visible, onClose, onRefresh }) => {
         </div>
       )}
 
+      {/* Meta Ads & Form Answers Tab */}
+      {activeTab === 'meta' && (
+        <div className="space-y-4">
+          <div className="bg-[#FCF8EF] p-4 rounded-lg border border-[#F5EBD3] text-xs">
+            <h4 className="font-bold text-xs uppercase tracking-wider text-[#8C671D] mb-3 flex items-center gap-1.5">
+              <Megaphone size={14} /> Meta Campaign & Attribution
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <span className="text-[#737373] font-semibold block">Facebook Page:</span>
+                <span className="font-bold text-[#262626]">{lead.metaPageName || 'N/A'}</span>
+              </div>
+              <div>
+                <span className="text-[#737373] font-semibold block">Lead Form:</span>
+                <span className="font-bold text-[#262626]">{lead.metaFormName || 'N/A'}</span>
+              </div>
+              <div>
+                <span className="text-[#737373] font-semibold block">Campaign Name:</span>
+                <span className="font-bold text-[#262626]">{lead.metaCampaignName || 'Organic / Direct'}</span>
+              </div>
+              <div>
+                <span className="text-[#737373] font-semibold block">Ad Name:</span>
+                <span className="font-bold text-[#262626]">{lead.metaAdName || 'N/A'}</span>
+              </div>
+              <div>
+                <span className="text-[#737373] font-semibold block">Meta Lead ID:</span>
+                <span className="font-mono text-xs text-gray-700">{lead.metaLeadId || 'N/A'}</span>
+              </div>
+              <div>
+                <span className="text-[#737373] font-semibold block">Form Submission Time (Meta):</span>
+                <span className="font-bold text-[#262626]">
+                  {lead.metaCreatedAt ? new Date(lead.metaCreatedAt).toLocaleString() : 'N/A'}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h4 className="font-bold text-xs uppercase tracking-wider text-[#262626] mb-2 flex items-center gap-1.5">
+              <FileQuestion size={14} className="text-[#8C671D]" /> User Submitted Answers
+            </h4>
+
+            {(!lead.formAnswers || lead.formAnswers.length === 0) ? (
+              <p className="text-xs text-gray-500 italic p-3 bg-gray-50 rounded border border-gray-200">
+                No custom questions were included in this Meta lead form.
+              </p>
+            ) : (
+              <div className="space-y-2">
+                {lead.formAnswers.map((ans, idx) => (
+                  <div
+                    key={idx}
+                    className="p-3 bg-white rounded-lg border border-[#E8E2D5] flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs"
+                  >
+                    <span className="font-bold text-[#737373] capitalize">
+                      {ans.label || ans.fieldName}:
+                    </span>
+                    <span className="font-extrabold text-[#262626] text-right">
+                      {ans.value || '—'}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Call Logs Tab */}
+      {activeTab === 'calls' && (
+        <div className="space-y-3">
+          <div className="flex items-center justify-between pb-2 border-b border-[#E8E2D5]">
+            <h4 className="font-bold text-xs uppercase tracking-wider text-[#262626] m-0">
+              Call Activity Records
+            </h4>
+          </div>
+
+          {(!lead.callLogs || lead.callLogs.length === 0) ? (
+            <div className="text-center py-8 text-xs text-gray-500 bg-gray-50 rounded-lg border border-gray-200">
+              No calls have been logged for this lead yet. Use the dial action in the leads table to place and record calls.
+            </div>
+          ) : (
+            <div className="space-y-2.5">
+              {lead.callLogs.map((c, i) => (
+                <div
+                  key={i}
+                  className="p-3 bg-white rounded-lg border border-[#E8E2D5] space-y-1 text-xs"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-[#262626] flex items-center gap-1.5">
+                      <PhoneCall size={13} className="text-[#8C671D]" />
+                      Outcome: <span className="text-[#8C671D]">{c.outcome}</span>
+                    </span>
+                    <span className="text-[11px] text-gray-500">
+                      {new Date(c.dialedAt).toLocaleString()}
+                    </span>
+                  </div>
+                  {c.duration > 0 && (
+                    <p className="text-[11px] text-gray-600 m-0">
+                      Duration: ~{Math.round(c.duration / 60) || 1} min ({c.duration}s)
+                    </p>
+                  )}
+                  {c.notes && (
+                    <p className="text-xs text-gray-700 bg-[#F8F8F6] p-2 rounded border border-gray-200 m-0 mt-1">
+                      {c.notes}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Follow-up Tab */}
       {activeTab === 'followup' && (
         <div className="space-y-6">
           {/* Schedule Follow-up Form */}
@@ -245,10 +421,12 @@ export const LeadDetailModal = ({ lead, visible, onClose, onRefresh }) => {
 
                 <Form.Item name="status" label="Update Lead Stage">
                   <Select placeholder="Optionally change stage">
-                    <Select.Option value="Contacted">Contacted</Select.Option>
+                    <Select.Option value="Hot">Hot</Select.Option>
+                    <Select.Option value="Warm">Warm</Select.Option>
+                    <Select.Option value="Cold">Cold</Select.Option>
                     <Select.Option value="Interested">Interested</Select.Option>
-                    <Select.Option value="Site Visit Scheduled">Site Visit Scheduled</Select.Option>
-                    <Select.Option value="Negotiation">Negotiation</Select.Option>
+                    <Select.Option value="In Progress">In Progress</Select.Option>
+                    <Select.Option value="Not Interested">Not Interested</Select.Option>
                     <Select.Option value="Lost">Lost</Select.Option>
                   </Select>
                 </Form.Item>

@@ -8,6 +8,7 @@ import { Login } from './pages/auth/Login';
 import { BootstrapSetup } from './pages/auth/BootstrapSetup';
 import { Dashboard } from './pages/dashboard/Dashboard';
 import { LeadsList } from './pages/leads/LeadsList';
+import { ConnectMetaPage } from './pages/meta/ConnectMetaPage';
 import { CustomersList } from './pages/customers/CustomersList';
 import { PropertiesList } from './pages/properties/PropertiesList';
 import { SiteVisitsPage } from './pages/site-visits/SiteVisitsPage';
@@ -105,6 +106,33 @@ export const App = () => {
           element={
             <ModuleGuard module="leads">
               <LeadsList />
+            </ModuleGuard>
+          }
+        />
+
+        <Route
+          path="track-leads"
+          element={
+            <ModuleGuard module="leads">
+              <LeadsList />
+            </ModuleGuard>
+          }
+        />
+
+        <Route
+          path="connect-meta"
+          element={
+            <ModuleGuard module="leads">
+              <ConnectMetaPage />
+            </ModuleGuard>
+          }
+        />
+
+        <Route
+          path="connect-meta/callback"
+          element={
+            <ModuleGuard module="leads">
+              <ConnectMetaPage />
             </ModuleGuard>
           }
         />
