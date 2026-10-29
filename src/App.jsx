@@ -3,6 +3,17 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import { AppLayout } from './components/layout/AppLayout';
 
+// Public Pages & Layout
+import { PublicLayout } from './components/public/PublicLayout';
+import { HomePage } from './pages/public/HomePage';
+import { FeaturesPage } from './pages/public/FeaturesPage';
+import { HowItWorksPage } from './pages/public/HowItWorksPage';
+import { AboutPage } from './pages/public/AboutPage';
+import { ContactPage } from './pages/public/ContactPage';
+import { PrivacyPolicyPage } from './pages/public/PrivacyPolicyPage';
+import { TermsConditionsPage } from './pages/public/TermsConditionsPage';
+import { DataDeletionPage } from './pages/public/DataDeletionPage';
+
 // Pages
 import { Login } from './pages/auth/Login';
 import { BootstrapSetup } from './pages/auth/BootstrapSetup';
@@ -77,23 +88,32 @@ const ModuleGuard = ({ module, children }) => {
 export const App = () => {
   return (
     <Routes>
+      {/* Public Website & Legal Routes */}
+      <Route element={<PublicLayout />}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/features" element={<FeaturesPage />} />
+        <Route path="/how-it-works" element={<HowItWorksPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+        <Route path="/terms-and-conditions" element={<TermsConditionsPage />} />
+        <Route path="/data-deletion" element={<DataDeletionPage />} />
+      </Route>
+
       {/* Public Auth Routes */}
       <Route path="/login" element={<Login />} />
       <Route path="/setup" element={<BootstrapSetup />} />
 
       {/* Protected App Routes */}
       <Route
-        path="/"
         element={
           <ProtectedRoute>
             <AppLayout />
           </ProtectedRoute>
         }
       >
-        <Route index element={<Navigate to="/dashboard" replace />} />
-
         <Route
-          path="dashboard"
+          path="/dashboard"
           element={
             <ModuleGuard module="dashboard">
               <Dashboard />
@@ -102,7 +122,7 @@ export const App = () => {
         />
 
         <Route
-          path="leads"
+          path="/leads"
           element={
             <ModuleGuard module="leads">
               <LeadsList />
@@ -111,7 +131,7 @@ export const App = () => {
         />
 
         <Route
-          path="track-leads"
+          path="/track-leads"
           element={
             <ModuleGuard module="leads">
               <LeadsList />
@@ -120,7 +140,7 @@ export const App = () => {
         />
 
         <Route
-          path="connect-meta"
+          path="/connect-meta"
           element={
             <ModuleGuard module="leads">
               <ConnectMetaPage />
@@ -129,7 +149,7 @@ export const App = () => {
         />
 
         <Route
-          path="connect-meta/callback"
+          path="/connect-meta/callback"
           element={
             <ModuleGuard module="leads">
               <ConnectMetaPage />
@@ -138,7 +158,7 @@ export const App = () => {
         />
 
         <Route
-          path="customers"
+          path="/customers"
           element={
             <ModuleGuard module="customers">
               <CustomersList />
@@ -147,7 +167,7 @@ export const App = () => {
         />
 
         <Route
-          path="properties"
+          path="/properties"
           element={
             <ModuleGuard module="properties">
               <PropertiesList />
@@ -156,7 +176,7 @@ export const App = () => {
         />
 
         <Route
-          path="site-visits"
+          path="/site-visits"
           element={
             <ModuleGuard module="site_visits">
               <SiteVisitsPage />
@@ -165,7 +185,7 @@ export const App = () => {
         />
 
         <Route
-          path="bookings"
+          path="/bookings"
           element={
             <ModuleGuard module="bookings">
               <BookingsList />
@@ -174,7 +194,7 @@ export const App = () => {
         />
 
         <Route
-          path="payments"
+          path="/payments"
           element={
             <ModuleGuard module="payments">
               <PaymentsLedger />
@@ -183,7 +203,7 @@ export const App = () => {
         />
 
         <Route
-          path="employees"
+          path="/employees"
           element={
             <ModuleGuard module="employees">
               <EmployeesList />
@@ -192,7 +212,7 @@ export const App = () => {
         />
 
         <Route
-          path="reports"
+          path="/reports"
           element={
             <ModuleGuard module="reports">
               <ReportsPage />
@@ -201,7 +221,7 @@ export const App = () => {
         />
 
         <Route
-          path="notifications"
+          path="/notifications"
           element={
             <ModuleGuard module="notifications">
               <NotificationsPage />
@@ -210,7 +230,7 @@ export const App = () => {
         />
 
         <Route
-          path="settings"
+          path="/settings"
           element={
             <ModuleGuard module="settings">
               <SettingsPage />
@@ -219,8 +239,8 @@ export const App = () => {
         />
       </Route>
 
-      {/* Fallback 404 */}
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      {/* Fallback 404 - Redirects to Landing Page */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };
