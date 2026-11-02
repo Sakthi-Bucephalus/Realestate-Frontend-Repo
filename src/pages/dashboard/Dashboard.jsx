@@ -13,15 +13,20 @@ import {
   ArrowRight,
   Briefcase,
   CheckCircle2,
+  Shield,
+  Activity,
+  UserCheck,
+  MapPin,
+  Tag as TagIcon,
 } from 'lucide-react';
-import { Button, Progress } from 'antd';
+import { Button, Progress, Tag } from 'antd';
 import { PageHeader } from '../../components/common/PageHeader';
 import { StatCard } from '../../components/common/StatCard';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
 
 export const Dashboard = () => {
-  const { user } = useAuth();
+  const { user, isMD } = useAuth();
   const navigate = useNavigate();
 
   const { data: statsData, isLoading } = useQuery({
@@ -37,35 +42,152 @@ export const Dashboard = () => {
   const inventory = statsData?.inventory || { available: 0, reserved: 0, sold: 0, total: 0 };
   const stageBreakdown = statsData?.stageBreakdown || {};
   const salesTrends = statsData?.salesTrends || [];
+  const userManagement = statsData?.userManagementKpis || null;
+  const recentActivities = statsData?.recentActivities || [];
 
   const currencySymbol = user?.currency?.symbol || '₹';
 
+  // Role subtitle badge
+  const getRoleBadge = () => {
+    if (isMD) {
+      return (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#FCF8EF] border border-[#DEC07A] text-[#8C671D] text-xs font-bold">
+          <Shield size={13} /> Managing Director — Unrestricted Organization Authority
+        </span>
+      );
+    }
+    if (user?.role === 'director') {
+      return (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-purple-50 border border-purple-200 text-purple-700 text-xs font-bold">
+          <Shield size={13} /> Director — Executive Business Units
+        </span>
+      );
+    }
+    if (user?.role === 'zonal_manager') {
+      return (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-cyan-50 border border-cyan-200 text-cyan-700 text-xs font-bold">
+          <MapPin size={13} /> Zonal Manager — Zone: {user?.zone || 'Assigned Territory'}
+        </span>
+      );
+    }
+    if (user?.role === 'sales_manager') {
+      return (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold">
+          <Users2 size={13} /> Sales Manager — Team: {user?.team || 'Assigned Unit'}
+        </span>
+      );
+    }
+    return (
+      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-gray-50 border border-gray-200 text-gray-700 text-xs font-semibold">
+        {user?.role ? user.role.replace(/_/g, ' ').toUpperCase() : 'EXECUTIVE'}
+      </span>
+    );
+  };
+
   return (
     <div className="space-y-6">
-      <PageHeader
-        title={`Welcome, ${user?.firstName || 'User'}`}
-        subtitle="Here is an overview of your real estate business operations and performance today."
-        extra={
-          <div className="flex gap-2">
-            <Button
-              type="primary"
-              icon={<Plus size={16} />}
-              onClick={() => navigate('/leads')}
-              className="font-semibold text-xs h-9"
-            >
-              Add Lead
-            </Button>
-            <Button
-              onClick={() => navigate('/properties')}
-              className="font-semibold text-xs h-9 border-[#DEC07A] text-[#8C671D] hover:bg-[#FCF8EF]"
-            >
-              Inventory
-            </Button>
+      <div className="bg-white p-5 rounded-xl border border-[#E8E2D5] shadow-card flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+            <h1 className="text-xl sm:text-2xl font-extrabold text-[#262626] m-0">
+              Welcome, {user?.firstName || 'User'}
+            </h1>
+            {getRoleBadge()}
           </div>
-        }
-      />
+          <p className="text-xs text-[#737373] m-0">
+            {isMD
+              ? 'Complete, unrestricted operational visibility across all organization branches, zones, teams, and data records.'
+              : `Operational dashboard tailored for your assigned role and organizational scope.`}
+          </p>
+        </div>
 
-      {/* Row 1: Urgent Attention Cards (Overdue & Due Today Follow-ups, Upcoming Visits) */}
+        <div className="flex gap-2">
+          <Button
+            type="primary"
+            icon={<Plus size={16} />}
+            onClick={() => navigate('/leads')}
+            className="font-semibold text-xs h-9"
+          >
+            Add Lead
+          </Button>
+          <Button
+            onClick={() => navigate('/properties')}
+            className="font-semibold text-xs h-9 border-[#DEC07A] text-[#8C671D] hover:bg-[#FCF8EF]"
+          >
+            Inventory
+          </Button>
+        </div>
+      </div>
+
+      {/* Row 1: MD User Management Metrics (Visible to MD / Executive Director) */}
+      {isMD && userManagement && (
+        <div className="bg-white p-5 rounded-xl border border-[#E8E2D5] shadow-card">
+          <div className="flex items-center justify-between mb-3 border-b border-[#F5EBD3] pb-2">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-[#8C671D] m-0 flex items-center gap-1.5">
+              <UserCheck size={16} /> Organization Staff & Role Distribution
+            </h3>
+            <button
+              onClick={() => navigate('/employees')}
+              className="text-xs text-[#8C671D] font-bold hover:underline"
+            >
+              Manage Users & Roles &rarr;
+            </button>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5">
+            <div className="p-2.5 rounded-lg bg-[#FCF8EF] border border-[#DEC07A] text-center">
+              <span className="text-[10px] text-[#8C671D] uppercase font-bold block">Total Staff</span>
+              <span className="text-xl font-extrabold text-[#8C671D] block mt-0.5">
+                {userManagement.totalUsers}
+              </span>
+            </div>
+
+            <div className="p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-center">
+              <span className="text-[10px] text-emerald-700 uppercase font-bold block">Active Accounts</span>
+              <span className="text-xl font-extrabold text-emerald-700 block mt-0.5">
+                {userManagement.activeUsers}
+              </span>
+            </div>
+
+            <div className="p-2.5 rounded-lg bg-purple-50 border border-purple-200 text-center">
+              <span className="text-[10px] text-purple-700 uppercase font-bold block">Directors</span>
+              <span className="text-xl font-extrabold text-purple-700 block mt-0.5">
+                {userManagement.roleCounts?.director || 0}
+              </span>
+            </div>
+
+            <div className="p-2.5 rounded-lg bg-blue-50 border border-blue-200 text-center">
+              <span className="text-[10px] text-blue-700 uppercase font-bold block">Business Mgrs</span>
+              <span className="text-xl font-extrabold text-blue-700 block mt-0.5">
+                {userManagement.roleCounts?.business_manager || 0}
+              </span>
+            </div>
+
+            <div className="p-2.5 rounded-lg bg-cyan-50 border border-cyan-200 text-center">
+              <span className="text-[10px] text-cyan-700 uppercase font-bold block">Zonal Mgrs</span>
+              <span className="text-xl font-extrabold text-cyan-700 block mt-0.5">
+                {userManagement.roleCounts?.zonal_manager || 0}
+              </span>
+            </div>
+
+            <div className="p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-center">
+              <span className="text-[10px] text-amber-700 uppercase font-bold block">Sales Mgrs</span>
+              <span className="text-xl font-extrabold text-amber-700 block mt-0.5">
+                {userManagement.roleCounts?.sales_manager || 0}
+              </span>
+            </div>
+
+            <div className="p-2.5 rounded-lg bg-indigo-50 border border-indigo-200 text-center">
+              <span className="text-[10px] text-indigo-700 uppercase font-bold block">Mediators & Ref</span>
+              <span className="text-xl font-extrabold text-indigo-700 block mt-0.5">
+                {(userManagement.roleCounts?.mediator || 0) + (userManagement.roleCounts?.referrals || 0)}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Row 2: Urgent Operational Attention Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           title="Follow-ups Due Today"
@@ -101,7 +223,7 @@ export const Dashboard = () => {
         />
       </div>
 
-      {/* Row 2: Financial & Deal KPIs */}
+      {/* Row 3: Financial & Pipeline Deal KPIs */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           title="Total Leads"
@@ -140,7 +262,7 @@ export const Dashboard = () => {
         />
       </div>
 
-      {/* Row 3: Inventory Breakdown & Pipeline Stage Funnel */}
+      {/* Row 4: Inventory & Lead Funnel */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Inventory Summary */}
         <div className="bg-white p-6 rounded-xl border border-[#E8E2D5] shadow-card">
@@ -259,6 +381,40 @@ export const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* Row 5: Recent Audit Activities (MD Only) */}
+      {isMD && recentActivities.length > 0 && (
+        <div className="bg-white p-5 rounded-xl border border-[#E8E2D5] shadow-card">
+          <div className="flex items-center justify-between mb-3 border-b border-[#F5EBD3] pb-2">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-[#8C671D] m-0 flex items-center gap-1.5">
+              <Activity size={16} /> Recent Administrative Activity Log
+            </h3>
+            <button
+              onClick={() => navigate('/settings')}
+              className="text-xs text-[#8C671D] font-bold hover:underline"
+            >
+              Full Audit History &rarr;
+            </button>
+          </div>
+
+          <div className="divide-y divide-gray-100">
+            {recentActivities.map((act) => (
+              <div key={act._id} className="py-2.5 flex items-center justify-between text-xs">
+                <div className="flex items-center gap-2">
+                  <Tag color="gold" className="font-bold text-[10px] m-0">
+                    {act.action}
+                  </Tag>
+                  <span className="font-semibold text-[#262626]">{act.performedByName || 'System'}</span>
+                  <span className="text-gray-500">• {act.entityType} ({act.entityId || 'N/A'})</span>
+                </div>
+                <span className="text-gray-400 text-[11px]">
+                  {new Date(act.createdAt).toLocaleString()}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

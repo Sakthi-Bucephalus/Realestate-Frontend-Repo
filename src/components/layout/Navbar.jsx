@@ -6,6 +6,23 @@ import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 
+const formatRoleLabel = (role) => {
+  const map = {
+    managing_director: 'Managing Director (MD)',
+    director: 'Director',
+    business_manager: 'Business Manager',
+    zonal_manager: 'Zonal Manager',
+    sales_manager: 'Sales Manager',
+    mediator: 'Mediator',
+    referrals: 'Referrals',
+    owner: 'Managing Director',
+    admin: 'Administrator',
+    hr: 'HR Manager',
+    employee: 'Sales Executive',
+  };
+  return map[role] || (role ? role.replace(/_/g, ' ').toUpperCase() : 'USER');
+};
+
 export const Navbar = ({ setMobileOpen }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -91,7 +108,7 @@ export const Navbar = ({ setMobileOpen }) => {
             {user?.organizationName || 'EstateFlow'}
           </p>
           <span className="inline-block mt-0.5 px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-[#FCF8EF] text-[#8C671D] border border-[#DEC07A]">
-            {user?.role}
+            {formatRoleLabel(user?.role)}
           </span>
         </div>
       ),

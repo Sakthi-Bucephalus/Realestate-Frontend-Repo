@@ -68,24 +68,33 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Permission Checker
+  // Managing Director protected root check (including legacy owner)
+  const isMD = user?.role === 'managing_director' || user?.role === 'owner' || user?.role === 'md';
+  const isDirector = user?.role === 'director';
+
+  // Permission Checker: MD has universal permission bypass
   const hasPermission = (permissionKey) => {
     if (!user) return false;
-    if (user.role === 'owner') return true;
+    if (isMD) return true; // MD can never lose access
+    if (user.customPermissions && user.customPermissions.includes(permissionKey)) {
+      return true;
+    }
     if (user.allowedPermissions && user.allowedPermissions.includes(permissionKey)) {
       return true;
     }
     return false;
   };
 
-  // Module Access Checker
+  // Module Access Checker: MD has universal module bypass
   const hasModule = (moduleKey) => {
     if (!user) return false;
+    if (isMD) return true; // MD always has access to all modules
+
     // Check organization enabled modules first
     if (user.enabledModules && !user.enabledModules.includes(moduleKey)) {
       return false;
     }
-    if (user.role === 'owner') return true;
+
     // Check role module permissions
     if (user.allowedModules && user.allowedModules.includes(moduleKey)) {
       return true;
@@ -104,6 +113,8 @@ export const AuthProvider = ({ children }) => {
         refreshUser,
         hasPermission,
         hasModule,
+        isMD,
+        isDirector,
         isAuthenticated: !!token && !!user,
       }}
     >

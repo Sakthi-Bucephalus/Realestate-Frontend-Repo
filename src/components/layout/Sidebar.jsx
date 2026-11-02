@@ -84,7 +84,7 @@ export const Sidebar = ({ mobileOpen, setMobileOpen, collapsed, setCollapsed }) 
     },
     {
       key: 'employees',
-      label: 'Employees & HR',
+      label: 'User & Role Management',
       path: '/employees',
       icon: UserCheck,
       module: 'employees',
