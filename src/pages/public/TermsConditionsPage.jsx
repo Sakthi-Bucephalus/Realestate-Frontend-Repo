@@ -24,24 +24,24 @@ export const TermsConditionsPage = () => {
       />
 
       {/* Header */}
-      <section className="pt-12 pb-14 sm:pt-16 sm:pb-16 bg-gradient-to-b from-[#FCF8EF]/60 via-white to-white border-b border-[#E8E2D5]">
+      <section className="pt-28 pb-14 sm:pt-36 sm:pb-16 bg-gradient-to-b from-[#F7F4ED] via-white to-white border-b border-[#E5E0D5]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FCF8EF] border border-[#DEC07A] text-xs font-semibold text-[#8C671D] mb-4">
-            <FileText className="w-3.5 h-3.5 text-[#B88A2E]" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F7F4ED] border border-[#D6B46A]/60 text-xs font-semibold text-[#111827] mb-4">
+            <FileText className="w-3.5 h-3.5 text-[#D6B46A]" />
             <span>Service Agreement & Terms</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#262626] tracking-tight mb-3">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#182230] tracking-tight mb-3">
             Terms & Conditions
           </h1>
-          <div className="flex flex-wrap items-center gap-4 text-xs text-[#737373]">
+          <div className="flex flex-wrap items-center gap-4 text-xs text-[#667085]">
             <span className="flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5 text-[#B88A2E]" />
+              <Calendar className="w-3.5 h-3.5 text-[#D6B46A]" />
               <span>Effective Date: <strong>{EFFECTIVE_DATE}</strong></span>
             </span>
             <span>•</span>
             <span>Last Updated: <strong>{EFFECTIVE_DATE}</strong></span>
             <span>•</span>
-            <span>Platform: RSVLeadSync</span>
+            <span>Platform: LevoraLead</span>
           </div>
         </div>
       </section>

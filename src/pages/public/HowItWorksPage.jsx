@@ -113,16 +113,16 @@ export const HowItWorksPage = () => {
       />
 
       {/* Header */}
-      <section className="pt-12 pb-16 sm:pt-20 sm:pb-20 bg-gradient-to-b from-[#FCF8EF]/60 via-white to-white border-b border-[#E8E2D5]">
+      <section className="pt-28 pb-16 sm:pt-36 sm:pb-20 bg-gradient-to-b from-[#F7F4ED] via-white to-white border-b border-[#E5E0D5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-4xl">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FCF8EF] border border-[#DEC07A] text-xs font-semibold text-[#8C671D] mb-4">
-            <Share2 className="w-3.5 h-3.5 text-[#B88A2E]" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F7F4ED] border border-[#D6B46A]/60 text-xs font-semibold text-[#111827] mb-4">
+            <Share2 className="w-3.5 h-3.5 text-[#D6B46A]" />
             <span>End-to-End Integration Lifecycle</span>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-[#262626] tracking-tight mb-4">
-            How RSVLeadSync Connects Your Lead Ads
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-[#182230] tracking-tight mb-4">
+            How LevoraLead Connects Your Lead Ads
           </h1>
-          <p className="text-base sm:text-lg text-[#525252] leading-relaxed max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg text-[#667085] leading-relaxed max-w-3xl mx-auto">
             A transparent, permission-based integration lifecycle explaining how authorized Meta Lead Ads data flows securely into your central CRM workspace.
           </p>
         </div>

@@ -10,8 +10,8 @@ export const DocumentTitle = ({ title, description }) => {
 
   useEffect(() => {
     // Set Document Title
-    const baseTitle = 'RSVLeadSync — Meta Ads Lead Integration & CRM Platform';
-    document.title = title ? `${title} | RSVLeadSync` : baseTitle;
+    const baseTitle = 'LevoraLead — Real Estate Lead Automation & Business Management Platform';
+    document.title = title ? `${title} | LevoraLead` : baseTitle;
 
     // Set or Update Meta Description
     if (description) {

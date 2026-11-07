@@ -3,15 +3,47 @@
 @tailwind utilities;
 
 :root {
-  --primary-gold: #B88A2E;
-  --dark-gold: #8C671D;
-  --light-gold: #F5EBD3;
-  --soft-gold: #FCF8EF;
+  /* Brand Identity – Midnight Navy + Luxury Gold */
+  --brand-primary: #111827;
+  --brand-accent: #D6B46A;
+  --brand-accent-hover: #C5A257;
+  --brand-accent-light: #F3E9D2;
+
+  --sidebar-bg: #111827;
+  --sidebar-active: #D6B46A;
+  --sidebar-text: #A7B0C0;
+
+  --page-bg: #F7F4ED;
+  --card-bg: #FFFFFF;
+  --secondary-card: #202C3D;
+
+  --text-primary: #182230;
+  --text-secondary: #667085;
+  --text-white: #FFFFFF;
+
+  --border-color: #E5E0D5;
+
+  --lead-hot: #DC5252;
+  --lead-warm: #E5A23B;
+  --lead-cold: #4388C7;
+  --lead-interested: #299D75;
+  --lead-not-interested: #8992A2;
+  --lead-progress: #8065C9;
+  --lead-new: #D6B46A;
+
+  /* Legacy aliases for backward compatibility */
+  --primary-gold: #D6B46A;
+  --dark-gold: #C5A257;
+  --light-gold: #F3E9D2;
+  --soft-gold: #F7F4ED;
   --surface-main: #FFFFFF;
-  --surface-sec: #F8F8F6;
-  --text-main: #262626;
-  --text-muted: #737373;
-  --border-color: #E8E2D5;
+  --surface-sec: #F7F4ED;
+  --text-main: #182230;
+  --text-muted: #667085;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {

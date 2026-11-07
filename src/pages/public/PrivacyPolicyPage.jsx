@@ -26,36 +26,36 @@ export const PrivacyPolicyPage = () => {
       />
 
       {/* Header */}
-      <section className="pt-12 pb-14 sm:pt-16 sm:pb-16 bg-gradient-to-b from-[#FCF8EF]/60 via-white to-white border-b border-[#E8E2D5]">
+      <section className="pt-28 pb-14 sm:pt-36 sm:pb-16 bg-gradient-to-b from-[#F7F4ED] via-white to-white border-b border-[#E5E0D5]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FCF8EF] border border-[#DEC07A] text-xs font-semibold text-[#8C671D] mb-4">
-            <Shield className="w-3.5 h-3.5 text-[#B88A2E]" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F7F4ED] border border-[#D6B46A]/60 text-xs font-semibold text-[#111827] mb-4">
+            <Shield className="w-3.5 h-3.5 text-[#D6B46A]" />
             <span>Compliance & Data Protection</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#262626] tracking-tight mb-3">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#182230] tracking-tight mb-3">
             Privacy Policy
           </h1>
-          <div className="flex flex-wrap items-center gap-4 text-xs text-[#737373]">
+          <div className="flex flex-wrap items-center gap-4 text-xs text-[#667085]">
             <span className="flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5 text-[#B88A2E]" />
+              <Calendar className="w-3.5 h-3.5 text-[#D6B46A]" />
               <span>Effective Date: <strong>{EFFECTIVE_DATE}</strong></span>
             </span>
             <span>•</span>
             <span>Last Updated: <strong>{EFFECTIVE_DATE}</strong></span>
             <span>•</span>
-            <span>Applies to: RSVLeadSync Platform & Meta Integrations</span>
+            <span>Applies to: LevoraLead Platform & Meta Integrations</span>
           </div>
         </div>
       </section>
 
       {/* Owner Confirmation Notice Box */}
-      <section className="py-4 bg-[#FCF8EF] border-b border-[#DEC07A]/60">
+      <section className="py-4 bg-[#F7F4ED] border-b border-[#E5E0D5]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-start gap-3 text-xs text-[#8C671D]">
-            <HelpCircle className="w-4 h-4 text-[#B88A2E] shrink-0 mt-0.5" />
+          <div className="flex items-start gap-3 text-xs text-[#182230]">
+            <HelpCircle className="w-4 h-4 text-[#D6B46A] shrink-0 mt-0.5" />
             <div>
-              <strong className="font-bold text-[#262626]">Deployment Configuration Checklist: </strong>
-              Items marked with <span className="inline-block px-1 py-0.2 bg-[#F5EBD3] text-[#8C671D] font-mono text-[10px] rounded border border-[#DEC07A]">[Owner Confirmation]</span> must be verified and updated by the operating organization prior to production launch and Meta App Review submission.
+              <strong className="font-bold text-[#182230]">Deployment Configuration Checklist: </strong>
+              Items marked with <span className="inline-block px-1 py-0.2 bg-white text-[#182230] font-mono text-[10px] rounded border border-[#E5E0D5]">[Owner Confirmation]</span> must be verified and updated by the operating organization prior to production launch and Meta App Review submission.
             </div>
           </div>
         </div>
